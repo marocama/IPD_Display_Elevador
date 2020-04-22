@@ -1,0 +1,10 @@
+main
+	__CC2DW
+		____DoICP
+	initialSetup
+interrupt
+	setColumn
+	printStorey
+		printColumn
+			verifyBit
+			lightLine
