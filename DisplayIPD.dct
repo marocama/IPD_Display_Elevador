@@ -226,6 +226,7 @@ ccpr2l
 character_1
 character_2
 charactervetor
+charactervetoraux
 chs0
 chs0_bit
 chs1
@@ -243,9 +244,9 @@ cm2con0
 cm2con1
 comfrem
 compare_double
+counteremptycolumn
 counterfor
 counterprint
-countervertical
 cren
 cren_bit
 csrc
@@ -380,6 +381,7 @@ ircf2_bit
 irp
 irp_bit
 lightline
+loadvetor
 longint2double
 longword2double
 lts
@@ -492,11 +494,8 @@ porta
 portb
 portc
 porte
-posfinalcolumn
-posinitialcolumn
 pr2
 printcolumn
-printstorey
 prsen
 prsen_bit
 ps0
@@ -697,6 +696,7 @@ sub_32x32_fp
 swap
 swdten
 swdten_bit
+switchcharacter
 sync
 sync_bit
 t0cs

@@ -1,13 +1,13 @@
 void setColumn(int column) {
 
-     PORTA |= 0b00101010; // off all columns
-     PORTB |= 0b00011001;
-     PORTC |= 0b00100111;
+     PORTA |= 0b00101010;                                                       // Desliga todas as colunas
+     PORTB |= 0b00011001;                                                       // Desliga todas as colunas
+     PORTC |= 0b00100111;                                                       // Desliga todas as colunas
 
-     PORTA &= 0b00111010; // off all lines
-     PORTB &= 0b11011001;
+     PORTA &= 0b00111010;                                                       // Desliga todas as linhas
+     PORTB &= 0b11011001;                                                       // Desliga todas as linhas
 
-     switch(column) {
+     switch(column) {                                                           // Liga a coluna passada por parametro
           case 1:
                on_column_1;
                break;
@@ -21,7 +21,7 @@ void setColumn(int column) {
                on_column_4;
                break;
           case 5:
-               if(posInitialColumn == 4) on_column_5;
+               on_column_5;
                break;
           case 6:
                on_column_6;
@@ -35,12 +35,14 @@ void setColumn(int column) {
           case 9:
                on_column_9;
                break;
+          case 10:
+               on_column_10;
           default:
                break;
      }
 }
 
-void lightLine(int line) {
+void lightLine(int line) {                                                      // Liga a linha passada por parametro
 
      switch(line) {
           case 1:
@@ -67,12 +69,9 @@ void lightLine(int line) {
      }
 }
 
-int verifyBit(char character, char position) {
+int verifyBit(char character, char position) {                                  // Recebe um caracter e uma posição de 0 a 7 e retorna o bit do caracter na posicao solicitada
      
      switch(position) {
-          case 0:
-               return character.f0;
-               break;
           case 1:
                return character.f1;
                break;
@@ -97,76 +96,40 @@ int verifyBit(char character, char position) {
      }
 }
 
-void printColumn(char character) {
+void printColumn(char character) {                                              // Recebe a coluna de um caracter como parametro e liga as respectivas linhas
 
-     for(counterFor = 1; counterFor < counterVertical; counterFor++) {
-          if(verifyBit(character, counterFor)) 
-               lightLine(counterVertical-counterFor);
+     for(counterFor = 1; counterFor < 8; counterFor++) {                        // Varre os 8 bits do caracter recebido como parametro
+          if(verifyBit(character, counterFor))                                  // Verifica se o bit atual é 1 ou 0
+               lightLine(counterFor);                                           // Se o bit atual for 1, liga a respectiva linha
      }
 }
 
-void printStorey(char character_1, char character_2, int status) {
+void switchCharacter(int position, char character) {                            // Recebe a posicao do vetor auxiliar um caracter. Após a busca nos defines, completa aquela posicao com o caracter desejado
 
-     char characterAux;
+     for(counterFor = 0; counterFor < 4; counterFor++) {                        // Realiza o procedimento nas quatro colunas do caracter escolhido
 
-     if(posInitialColumn == 1 && currentColumn < 6) {                           // Seta caracter que sera impresso no momento
-          characterAux = character_1;
-     } else {
-          characterAux = character_2;
+          switch(character) {                                                   // Busca nos defines pelo caracter
+               case 'A':
+                    characterVetorAux[position] = _A[counterFor];               // Preenche no vetor na posicao escolhida
+                    break;
+               case '2':
+                    characterVetorAux[position] = _2[counterFor];
+                    break;
+          }
+          position++;                                                           // Avança a proxima posicao no vetor auxiliar
      }
-     
-     //if(currentPrint % 2)
-       //              character = SETA;
+}
 
-     switch(characterAux) {
-          case 'A':
-               printColumn(_A[currentPosition-1]);
-               break;
-          case 'B':
-               printColumn(_B[currentPosition-1]);
-               break;
-          case 'C':
-               printColumn(_C[currentPosition-1]);
-               break;
-          case 'D':
-               printColumn(_D[currentPosition-1]);
-               break;
-          case 'E':
-               printColumn(_E[currentPosition-1]);
-               break;
-          case '0':
-               printColumn(_0[currentPosition-1]);
-               break;
-          case '1':
-               printColumn(_1[currentPosition-1]);
-               break;
-          case '2':
-               printColumn(_2[currentPosition-1]);
-               break;
-          case '3':
-               printColumn(_3[currentPosition-1]);
-               break;
-          case '4':
-               printColumn(_4[currentPosition-1]);
-               break;
-          case '5':
-               printColumn(_5[currentPosition-1]);
-               break;
-          case '6':
-               printColumn(_6[currentPosition-1]);
-               break;
-          case '7':
-               printColumn(_7[currentPosition-1]);
-               break;
-          case '8':
-               printColumn(_8[currentPosition-1]);
-               break;
-          case '9':
-               printColumn(_9[currentPosition-1]);
-               break;
-          default:
-               break;
+void loadVetor(char character_1, char character_2) {                            // Recebe os dois caracteres e preenche o vetor auxiliar por completo
+
+     for(counterFor = 0; counterFor < 10; counterFor++) {                       // Limpa todo o vetor auxiliar
+          characterVetorAux[counterFor] = 0;
      }
 
-
+     if(character_1 == 0x20) {                                                  // Se o character_1 for igual a 0x20, apenas o character_2 sera impresso e o mesmo sera centralizado
+          switchCharacter(3, character_2);
+     } else {                                                                   // Senao, imprime os dois caracteres
+          switchCharacter(0, character_1);
+          switchCharacter(5, character_2);
+     }
 }

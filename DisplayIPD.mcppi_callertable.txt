@@ -4,7 +4,8 @@ main
 	initialSetup
 interrupt
 	setColumn
-	printStorey
-		printColumn
-			verifyBit
-			lightLine
+	printColumn
+		verifyBit
+		lightLine
+	loadVetor
+		switchCharacter

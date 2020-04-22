@@ -1,24 +1,28 @@
-#line 1 "C:/Users/Public/Documents/Mikroelektronika/mikroC PRO for PIC/Projects/DisplayIPD/v2/DisplayIPD.c"
-char character_1, character_2;
+#line 1 "C:/Users/Public/Documents/Mikroelektronika/mikroC PRO for PIC/Projects/DisplayIPD/v3/DisplayIPD.c"
 
-char characterVetor[10];
+
+char character_1, character_2;
 
 char nextCharacter_1, nextCharacter_2;
 
 char statusPrint;
 
-char currentColumn = 1, currentPosition = 1;
 
-char counterVertical = 8;
+
+char characterVetor[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+char characterVetorAux[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+char currentColumn = 1, currentPosition = 1;
 
 char counterFor = 0;
 
 char counterPrint = 0;
 
-char posInitialColumn = 1, posFinalColumn = 10;
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/projects/displayipd/v2/defines.h"
-#line 39 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/projects/displayipd/v2/defines.h"
-char _A[4] = { 0b11111100, 0b00010010, 0b00010010, 0b11111100 };
+char counterEmptyColumn = 0;
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/projects/displayipd/v3/defines.h"
+#line 39 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/projects/displayipd/v3/defines.h"
+char _A[4] = { 0b01111110, 0b10010000, 0b10010000, 0b01111110 };
 char _B[4] = { 0b11111110, 0b10010010, 0b10010010, 0b01101100 };
 char _C[4] = { 0b01111110, 0b10000010, 0b10000010, 0b01111100 };
 char _D[4] = { 0b11111110, 0b10000010, 0b01000100, 0b00111000 };
@@ -26,7 +30,7 @@ char _E[4] = { 0b11111110, 0b10010010, 0b10010010, 0b10010010 };
 
 char _0[4] = { 0b01111100, 0b10000010, 0b10000010, 0b01111100 };
 char _1[4] = { 0b00001000, 0b10000100, 0b11111110, 0b10000000 };
-char _2[4] = { 0b11000100, 0b10100010, 0b10010010, 0b10001100 };
+char _2[4] = { 0b01000110, 0b10001010, 0b10010010, 0b01100010 };
 char _3[4] = { 0b00000000, 0b00000000, 0b00000000, 0b00000000 };
 char _4[4] = { 0b00000000, 0b00000000, 0b00000000, 0b00000000 };
 char _5[4] = { 0b00000000, 0b00000000, 0b00000000, 0b00000000 };
@@ -35,7 +39,7 @@ char _7[4] = { 0b00000000, 0b00000000, 0b00000000, 0b00000000 };
 char _8[4] = { 0b00000000, 0b00000000, 0b00000000, 0b00000000 };
 char _9[4] = { 0b01001100, 0b10010010, 0b10010010, 0b01111100 };
 
-char _DW[6] = { 0b00100000, 0b01100000, 0b11111111, 0b11111111, 0b01100000, 0b01000000, };
+char _DW[6] = { 0b01000000, 0b01100000, 0b11111111, 0b11111111, 0b01100000, 0b01000000, };
 char _UP[6] = { 0b00000100, 0b00001100, 0b11111111, 0b11111111, 0b00001100, 0b00000100, };
 
 
@@ -57,7 +61,7 @@ INTCON = 0b11000000;
 PIE1.TMR2IE = 1;
 T2CON = 0b00000101;
 }
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/projects/displayipd/v2/functions.h"
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/projects/displayipd/v3/functions.h"
 void setColumn(int column) {
 
  PORTA |= 0b00101010;
@@ -81,7 +85,7 @@ void setColumn(int column) {
   porta.f5=0 ;
  break;
  case 5:
- if(posInitialColumn == 4)  portb.f4=0 ;
+  portb.f4=0 ;
  break;
  case 6:
   portc.f0=0 ;
@@ -95,6 +99,8 @@ void setColumn(int column) {
  case 9:
   portc.f2=0 ;
  break;
+ case 10:
+  portb.f0=0 ;
  default:
  break;
  }
@@ -130,9 +136,6 @@ void lightLine(int line) {
 int verifyBit(char character, char position) {
 
  switch(position) {
- case 0:
- return character.f0;
- break;
  case 1:
  return character.f1;
  break;
@@ -159,139 +162,99 @@ int verifyBit(char character, char position) {
 
 void printColumn(char character) {
 
- for(counterFor = 1; counterFor < counterVertical; counterFor++) {
+ for(counterFor = 1; counterFor < 8; counterFor++) {
  if(verifyBit(character, counterFor))
- lightLine(counterVertical-counterFor);
+ lightLine(counterFor);
  }
 }
 
-void printStorey(char character_1, char character_2, int status) {
+void switchCharacter(int position, char character) {
 
- char characterAux;
+ for(counterFor = 0; counterFor < 4; counterFor++) {
 
- if(posInitialColumn == 1 && currentColumn < 6) {
- characterAux = character_1;
- } else {
- characterAux = character_2;
- }
-
-
-
-
- switch(characterAux) {
+ switch(character) {
  case 'A':
- printColumn(_A[currentPosition-1]);
- break;
- case 'B':
- printColumn(_B[currentPosition-1]);
- break;
- case 'C':
- printColumn(_C[currentPosition-1]);
- break;
- case 'D':
- printColumn(_D[currentPosition-1]);
- break;
- case 'E':
- printColumn(_E[currentPosition-1]);
- break;
- case '0':
- printColumn(_0[currentPosition-1]);
- break;
- case '1':
- printColumn(_1[currentPosition-1]);
+ characterVetorAux[position] = _A[counterFor];
  break;
  case '2':
- printColumn(_2[currentPosition-1]);
- break;
- case '3':
- printColumn(_3[currentPosition-1]);
- break;
- case '4':
- printColumn(_4[currentPosition-1]);
- break;
- case '5':
- printColumn(_5[currentPosition-1]);
- break;
- case '6':
- printColumn(_6[currentPosition-1]);
- break;
- case '7':
- printColumn(_7[currentPosition-1]);
- break;
- case '8':
- printColumn(_8[currentPosition-1]);
- break;
- case '9':
- printColumn(_9[currentPosition-1]);
- break;
- default:
+ characterVetorAux[position] = _2[counterFor];
  break;
  }
-
-
+ position++;
+ }
 }
-#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/projects/displayipd/v2/interruption.h"
+
+void loadVetor(char character_1, char character_2) {
+
+ for(counterFor = 0; counterFor < 10; counterFor++) {
+ characterVetorAux[counterFor] = 0;
+ }
+
+ if(character_1 == 0x20) {
+ switchCharacter(3, character_2);
+ } else {
+ switchCharacter(0, character_1);
+ switchCharacter(5, character_2);
+ }
+}
+#line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/projects/displayipd/v3/interruption.h"
 void interrupt() {
 
  setColumn(currentColumn);
+ printColumn(characterVetor[currentColumn-1]);
 
- switch(statusPrint) {
- case 0:
-
- break;
- case 1:
-
-
- break;
- case 2:
-
-
- break;
- default:
-
- break;
- }
-
- if(character_1 == 0x20) { posInitialColumn = 4; posFinalColumn = 7; } else { posInitialColumn = 1; posFinalColumn = 10; }
-
-
-
- printStorey(character_1, character_2, 1);
-
-
- if(currentColumn >= posFinalColumn) {
- currentColumn = posInitialColumn;
+ if(currentColumn >= 10) {
+ currentColumn = 1;
  currentPosition = 1;
  counterPrint++;
  } else {
  currentColumn++;
- if(currentPosition >= 5) {
- currentPosition = 1;
- } else {
  currentPosition++;
  }
+
+ if(counterPrint >= 180) {
+
+ for(counterFor = 0; counterFor < 10; counterFor++) {
+
+ switch(statusPrint) {
+ case 0:
+ break;
+ case 1:
+ characterVetor[counterFor] = (characterVetor[counterFor] << 1);
+ characterVetor[counterFor].f0 = (characterVetorAux[counterFor].f7);
+ characterVetorAux[counterFor] = (characterVetorAux[counterFor] << 1);
+ break;
+ case 2:
+ characterVetor[counterFor] = (characterVetor[counterFor] >> 1);
+ characterVetor[counterFor].f7 = (characterVetorAux[counterFor].f0);
+ characterVetorAux[counterFor] = (characterVetorAux[counterFor] >> 1);
+ break;
  }
 
- if((posInitialColumn == 1 && counterPrint > 90) ||
- (posInitialColumn == 4 && counterPrint == 180)) {
-
- counterVertical == 1 ? counterVertical = 8 : counterVertical--;
+ }
  counterPrint = 0;
- }
+ counterEmptyColumn++;
 
+ if(counterEmptyColumn >= 8) {
+#line 51 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/projects/displayipd/v3/interruption.h"
+ loadVetor(character_1, character_2);
+
+ counterEmptyColumn = 0;
+ }
+ }
 
  PIR1.TMR2IF = 0;
 }
-#line 23 "C:/Users/Public/Documents/Mikroelektronika/mikroC PRO for PIC/Projects/DisplayIPD/v2/DisplayIPD.c"
+#line 28 "C:/Users/Public/Documents/Mikroelektronika/mikroC PRO for PIC/Projects/DisplayIPD/v3/DisplayIPD.c"
 void main() {
  initialSetup();
 
- character_1 = '2';
- character_2 = '9';
+ character_1 = 'A';
+ character_2 = '2';
  statusPrint = 1;
 
- nextCharacter_1 = 'A';
- nextCharacter_2 = 'B';
+ nextCharacter_1 = '2';
+ nextCharacter_2 = 'A';
 
  while(1) {
  asm {clrwdt}
