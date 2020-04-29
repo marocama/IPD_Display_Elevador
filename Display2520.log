@@ -1,0 +1,12 @@
+0	1	mikroCPIC1618.exe -MSF -DBG -pP18F2520 -DL -O11111114 -fo8 -N"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Projects\DisplayIPD\Display2520.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Projects\DisplayIPD\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Projects\DisplayIPD\" "Display2520.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_UART_c67.mcl"	 
+hint: 0	1139	Available RAM: 1515 [bytes], Available ROM: 32768 [bytes]	 
+diagnostics: 0	122	Compilation Started	Display2520.c
+warning: 13	1509	Generated baud rate is 9615 bps (error = 0.16 percent)	config.h
+diagnostics: 49	123	Compiled Successfully	Display2520.c
+diagnostics: 0	127	All files Compiled in 110 ms	 
+hint: 0	1144	Used RAM (bytes): 266 (18%)  Free RAM (bytes): 1249 (82%)	Used RAM (bytes): 266 (18%)  Free RAM (bytes): 1249 (82%)
+hint: 0	1144	Used ROM (bytes): 4214 (13%)  Free ROM (bytes): 28554 (87%)	Used ROM (bytes): 4214 (13%)  Free ROM (bytes): 28554 (87%)
+diagnostics: 0	125	Project Linked Successfully	Display2520.mcppi
+diagnostics: 0	128	Linked in 31 ms	 
+diagnostics: 0	129	Project 'Display2520.mcppi' completed: 172 ms	 
+diagnostics: 0	103	Finished successfully: 28 abr 2020, 08:41:40	Display2520.mcppi

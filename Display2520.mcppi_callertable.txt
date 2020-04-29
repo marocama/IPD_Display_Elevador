@@ -1,8 +1,10 @@
 main
 	__CC2DW
-		____DoICP
 	initialSetup
+		UART1_Init
 interrupt
+	UART1_Read
+	setSerial
 	setColumn
 	printColumn
 		verifyBit
